@@ -3,7 +3,7 @@ version: "3"
 services:
 
   app:
-    build: .
+    image: efelikk/devops-demo
     container_name: devops_app
     ports:
       - "5000:5000"
