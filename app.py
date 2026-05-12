@@ -157,7 +157,6 @@ def home():
     </head>
     <body>
       <h1>🚀 Prometheus & Grafana Demo</h1>
-      <p>Bu uygulama sınıf sunumu için özel hazırlanmıştır.</p>
       <div class="badge">
         <p>📊 <strong>Prometheus:</strong> <a href="http://localhost:9090" target="_blank">localhost:9090</a></p>
         <p>📈 <strong>Grafana:</strong> <a href="http://localhost:3000" target="_blank">localhost:3000</a></p>
