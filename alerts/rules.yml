@@ -1,0 +1,44 @@
+groups:
+  - name: demo_alerts
+    interval: 10s
+    rules:
+
+      # Yüksek hata oranı uyarısı
+      - alert: HighErrorRate
+        expr: rate(http_errors_total[1m]) > 0.5
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Yüksek Hata Oranı Tespit Edildi!"
+          description: "Son 1 dakikada hata oranı {{ $value | humanize }}/s'yi aştı."
+
+      # Yüksek yanıt süresi uyarısı
+      - alert: SlowResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1.0
+        for: 15s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Yüksek Yanıt Süresi"
+          description: "P95 yanıt süresi {{ $value | humanizeDuration }} ile 1 saniyeyi aştı."
+
+      # Yüksek CPU kullanımı
+      - alert: HighCPUUsage
+        expr: app_cpu_usage_percent > 80
+        for: 20s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Kritik CPU Kullanımı!"
+          description: "CPU kullanımı %{{ $value | humanize }} seviyesinde."
+
+      # Çok fazla aktif kullanıcı
+      - alert: HighUserLoad
+        expr: active_users > 90
+        for: 10s
+        labels:
+          severity: info
+        annotations:
+          summary: "Yüksek Kullanıcı Yükü"
+          description: "{{ $value }} aktif kullanıcı mevcut."
