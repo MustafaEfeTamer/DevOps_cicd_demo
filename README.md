@@ -22,7 +22,7 @@ python load_generator.py
 |---|---|---|
 | 🌐 Flask Uygulaması | http://localhost:5000 | — |
 | 📊 Prometheus | http://localhost:9090 | — |
-| 📈 Grafana | http://localhost:3000 | efelikk / Efe!iKK2oo3? |
+| 📈 Grafana | http://localhost:3000 | - |
 | 🐳 Portainer | https://localhost:9443 | — |
 
 ---
