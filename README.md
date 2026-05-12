@@ -103,7 +103,7 @@ topk(3, rate(http_request_duration_seconds_sum[5m]))
 
 ### 4️⃣ Grafana Dashboard (5 dk)
 
-1. http://localhost:3000 → efelikk / Efe!iKK2oo3?
+1. http://localhost:3000 → 
 2. Dashboard otomatik yüklü gelir: **"🚀 DevOps Demo — Prometheus & Grafana Sunumu"**
 3. Panelleri göster:
    - **Gauge paneller** — CPU, RAM, aktif kullanıcı anlık durum
