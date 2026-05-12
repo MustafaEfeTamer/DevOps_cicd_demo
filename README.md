@@ -183,4 +183,4 @@ DevOps_cicd_demo/
 
 ---
 
-*Hazırlayan: DevOps Demo Projesi — Sınıf Sunumu için özelleştirilmiştir.*
+*Hazırlayan: Mustafa Efe Tamer
