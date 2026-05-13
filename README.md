@@ -29,7 +29,7 @@ python load_generator.py
 
 ## 📖 Sunum Akışı (Adım Adım)
 
-### 1️⃣ Prometheus Nedir? (5 dk)
+### 1️⃣ Prometheus Nedir?
 
 > **Açıklama:** Prometheus, zamana dayalı (time-series) metrik toplayan açık kaynak bir izleme sistemidir. Uygulamalar `/metrics` endpoint'i aracılığıyla veri sunar, Prometheus bu endpoint'i belirli aralıklarla çeker (pull model).
 
@@ -40,7 +40,7 @@ python load_generator.py
 
 ---
 
-### 2️⃣ 4 Metrik Tipi (8 dk)
+### 2️⃣ 4 Metrik Tipi 
 
 #### 🔢 Counter — Sadece Artar
 ```promql
@@ -83,7 +83,7 @@ request_processing_seconds_sum / request_processing_seconds_count
 
 ---
 
-### 3️⃣ PromQL Sorgu Örnekleri (5 dk)
+### 3️⃣ PromQL Sorgu Örnekleri
 
 ```promql
 # Hata oranı (%)
@@ -101,7 +101,7 @@ topk(3, rate(http_request_duration_seconds_sum[5m]))
 
 ---
 
-### 4️⃣ Grafana Dashboard (5 dk)
+### 4️⃣ Grafana Dashboard 
 
 1. http://localhost:3000 → 
 2. Dashboard otomatik yüklü gelir: **"🚀 DevOps Demo — Prometheus & Grafana Sunumu"**
@@ -112,7 +112,7 @@ topk(3, rate(http_request_duration_seconds_sum[5m]))
 
 ---
 
-### 5️⃣ Canlı Senaryo Demoları (7 dk)
+### 5️⃣ Canlı Senaryo Demoları 
 
 #### Senaryo A: Normal Trafik
 ```bash
@@ -134,7 +134,7 @@ python load_generator.py --error
 
 ---
 
-### 6️⃣ Alerting Kuralları (3 dk)
+### 6️⃣ Alerting Kuralları 
 
 Prometheus → **Alerts** sekmesi:
 - `HighErrorRate` — Saniyede 0.5'ten fazla hata
