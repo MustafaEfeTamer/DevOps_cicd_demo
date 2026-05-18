@@ -33,8 +33,8 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     environment:
-      - GF_SECURITY_ADMIN_USER=efelikk
-      - GF_SECURITY_ADMIN_PASSWORD=Efe!iKK2oo3? # Sınıfta göstermek için basit şifre
+      - GF_SECURITY_ADMIN_USER=user
+      - GF_SECURITY_ADMIN_PASSWORD=user # Sınıfta göstermek için basit şifre
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/dashboards/demo_dashboard.json
     volumes:
@@ -52,9 +52,10 @@ services:
     image: portainer/portainer-ce:latest
     container_name: portainer
     ports:
-      - "9443:9443"
+      - "9443:9443" # HTTPS UI
+      - "9000:9000" # HTTP UI (yedek)
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - //var/run/docker.sock:/var/run/docker.sock # Windows Docker Desktop
       - portainer_data:/data
     restart: unless-stopped
 

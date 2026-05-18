@@ -1,6 +1,10 @@
 # 🚀 DevOps Demo — Prometheus & Grafana Sınıf Sunumu
 
-Bu proje, **Prometheus** ve **Grafana**'nın temel özelliklerini canlı olarak göstermek için hazırlanmış bir sunum demo'sudur.
+[![CI/CD Pipeline](https://github.com/MustafaEfeTamer/DevOps_cicd_demo/actions/workflows/ci.yml/badge.svg)](https://github.com/MustafaEfeTamer/DevOps_cicd_demo/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/badge/Docker-Hub-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/)
+[![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+
+Bu proje, **Prometheus** ve **Grafana**'nın temel özelliklerini canlı olarak göstermek için hazırlanmış bir demo niteliği taşımaktadır. Aynı zamanda tam otomatik bir **GitHub Actions CI/CD pipeline** içerir.
 
 ---
 
@@ -13,17 +17,17 @@ docker-compose up --build -d
 # 2. Servislerin hazır olmasını bekle (yaklaşık 30 saniye)
 docker-compose ps
 
-# 3. Trafik üretecini başlat (yeni terminal)
-pip install requests
+# 3. Gerekli bağımlılıkları yükle ve trafik üretecini başlat (yeni terminal)
+pip install -r requirements.txt
 python load_generator.py
 ```
 
-| Servis | URL | Giriş |
+| Servis | URL | Giriş (Kullanıcı / Şifre) |
 |---|---|---|
 | 🌐 Flask Uygulaması | http://localhost:5000 | — |
 | 📊 Prometheus | http://localhost:9090 | — |
-| 📈 Grafana | http://localhost:3000 | - |
-| 🐳 Portainer | https://localhost:9443 | — |
+| 📈 Grafana | http://localhost:3000 | `user` / `user` |
+| 🐳 Portainer | http://localhost:9000 (veya https://localhost:9443) | *İlk girişte siz belirleyeceksiniz* |
 
 ---
 
@@ -150,6 +154,50 @@ python load_generator.py --error
 
 ---
 
+## ⚙️ CI/CD Pipeline (GitHub Actions)
+
+Her `main` branch'e yapılan `push` veya `pull request` otomatik olarak aşağıdaki pipeline'ı tetikler:
+
+```
+┌─────────────┐    ┌─────────────┐    ┌──────────────────┐    ┌──────────────┐
+│ 🔍 Lint     │───▶│ 🧪 Test     │───▶│ 🐳 Build & Push  │───▶│ 📋 Summary   │
+│ Flake8      │    │ Smoke Tests │    │ Docker Image     │    │ Pipeline Log │
+└─────────────┘    └─────────────┘    └──────────────────┘    └──────────────┘
+```
+
+### Pipeline Adımları
+
+| Job | Açıklama | Tetiklenme Koşulu |
+|-----|----------|-------------------|
+| 🔍 **Lint** | `flake8` ile sözdizimi & stil kontrolü | Her push / PR |
+| 🧪 **Test** | Flask uygulaması ayağa kaldırılıp 7 endpoint test edilir | Lint geçtikten sonra |
+| 🐳 **Build & Push** | Docker image build edilip DockerHub'a gönderilir | Sadece `main` push |
+| 🔬 **Security Scan** | Trivy ile CRITICAL/HIGH zafiyet taraması | Build & Push sonrası |
+| 📋 **Summary** | Tüm job sonuçları özetlenir | Her zaman |
+
+### Gerekli GitHub Secrets
+
+Repo → **Settings → Secrets and variables → Actions** kısmına ekle:
+
+| Secret Adı | Açıklama |
+|---|---|
+| `DOCKER_USERNAME` | DockerHub kullanıcı adın |
+| `DOCKER_PASSWORD` | DockerHub access token |
+
+### Smoke Test Kapsamı
+
+```bash
+✅ /health      → 200 OK
+✅ /            → 200 OK (ana sayfa)
+✅ /api/data    → 200 OK (JSON metrik verisi)
+✅ /api/users   → 200 OK (kullanıcı listesi)
+✅ /metrics     → 200 OK (Prometheus formatı)
+✅ /error       → 500 (beklenen hata kodu)
+✅ Prometheus metrikleri varlık kontrolü
+```
+
+---
+
 ## 🛑 Durdurma
 
 ```bash
@@ -164,11 +212,15 @@ docker-compose down -v
 
 ```
 DevOps_cicd_demo/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                  # GitHub Actions CI/CD pipeline
 ├── app.py                          # Flask uygulaması (4 metrik tipi)
 ├── Dockerfile                      # Python container tanımı
 ├── docker-compose.yml              # Tüm servisler
 ├── prometheus.yml                  # Prometheus konfigürasyonu
 ├── load_generator.py               # Trafik üreteci
+├── requirements.txt                # Python bağımlılıkları
 ├── alerts/
 │   └── rules.yml                   # Alerting kuralları
 └── grafana/
