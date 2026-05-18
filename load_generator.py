@@ -1,5 +1,5 @@
-"""
-load_generator.py — Prometheus & Grafana Sunum Trafik Üreteci
+"""load_generator.py — Prometheus & Grafana Sunum Trafik Üreteci.
+
 ─────────────────────────────────────────────────────────────
 Kullanım:
     python load_generator.py           # Normal mod (karma trafik)
@@ -17,17 +17,19 @@ BASE_URL = "http://localhost:5000"
 
 # Endpoint ağırlıkları (olasılık dağılımı)
 NORMAL_ENDPOINTS = [
-    ("/",           30),   # Ana sayfa — en çok ziyaret
-    ("/api/data",   25),   # API — sık kullanılan
-    ("/api/users",  20),   # Kullanıcı listesi
-    ("/buy",        15),   # Sepete ekle — yavaş
-    ("/checkout",   8),    # Sipariş — kritik
-    ("/error",      2),    # Hata — az ama var
+    ("/", 30),  # Ana sayfa — en çok ziyaret
+    ("/api/data", 25),  # API — sık kullanılan
+    ("/api/users", 20),  # Kullanıcı listesi
+    ("/buy", 15),  # Sepete ekle — yavaş
+    ("/checkout", 8),  # Sipariş — kritik
+    ("/error", 2),  # Hata — az ama var
 ]
+
 
 def weighted_choice(options):
     endpoints, weights = zip(*options)
     return random.choices(endpoints, weights=weights, k=1)[0]
+
 
 def make_request(endpoint, session):
     try:
@@ -39,8 +41,9 @@ def make_request(endpoint, session):
     except Exception as e:
         print(f"  🔴 {endpoint:<15} → BAĞLANTI HATASI: {e}")
 
+
 def normal_traffic(rps=3):
-    """Normal karma trafik — saniyede ~rps istek"""
+    """Generate normal karma traffic at the specified rate."""
     print(f"\n🟢 Normal trafik başlatılıyor... ({rps} req/s)")
     print("   Ctrl+C ile durdurabilirsiniz.\n")
     session = requests.Session()
@@ -49,18 +52,19 @@ def normal_traffic(rps=3):
         threading.Thread(target=make_request, args=(endpoint, session), daemon=True).start()
         time.sleep(1 / rps)
 
+
 def spike_traffic():
-    """Yük artışı senaryosu — Grafana'da dramatik artış gösterir"""
+    """Simulate spike traffic scenario."""
     print("\n⚡ YÜK ARTIŞI SENARYOSU başlatıldı!")
     print("   Prometheus ve Grafana'da ani yükselişi izleyin.\n")
     session = requests.Session()
 
     phases = [
-        ("Düşük trafik",    10, 2,  "/"),
-        ("Normal trafik",   15, 5,  "/api/data"),
-        ("YÜK ARTIŞI 🔥",  10, 20, "/buy"),
-        ("Zirve noktası",   10, 30, "/api/users"),
-        ("Normalleşme",     15, 5,  "/"),
+        ("Düşük trafik", 10, 2, "/"),
+        ("Normal trafik", 15, 5, "/api/data"),
+        ("YÜK ARTIŞI 🔥", 10, 20, "/buy"),
+        ("Zirve noktası", 10, 30, "/api/users"),
+        ("Normalleşme", 15, 5, "/"),
     ]
 
     for phase_name, duration_s, rps, endpoint in phases:
@@ -72,8 +76,9 @@ def spike_traffic():
 
     print("\n✅ Spike senaryosu tamamlandı!")
 
+
 def error_storm():
-    """Hata fırtınası — Grafana'da hata oranını artırır"""
+    """Simulate error storm to increase error rate in Grafana."""
     print("\n🔴 HATA SENARYOSU başlatıldı!")
     print("   Prometheus'da http_errors_total metriğini izleyin.\n")
     session = requests.Session()
@@ -84,6 +89,7 @@ def error_storm():
         time.sleep(0.3)
 
     print("\n✅ Hata senaryosu tamamlandı!")
+
 
 if __name__ == "__main__":
     print("""

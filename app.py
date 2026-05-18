@@ -71,8 +71,9 @@ orders_total = Counter(
 #  YARDIMCI FONKSİYONLAR
 # ─────────────────────────────────────────────
 
+
 def track_request(endpoint, status_code, duration):
-    """Metrik kaydeder"""
+    """Metrik kaydeder."""
     method = request.method if request else 'GET'
     http_requests_total.labels(
         method=method,
@@ -85,8 +86,9 @@ def track_request(endpoint, status_code, duration):
 #  BACKGROUND THREAD — Canlı Veri Simülasyonu
 # ─────────────────────────────────────────────
 
+
 def simulate_system_metrics():
-    """Gerçekçi sistem metriklerini sürekli günceller"""
+    """Gerçekçi sistem metriklerini sürekli günceller."""
     cpu_base = 30.0
     mem_base = 256.0
     user_base = 50
@@ -118,17 +120,20 @@ def simulate_system_metrics():
 
         time.sleep(3)
 
+
 # Thread'i başlat
 bg_thread = threading.Thread(target=simulate_system_metrics, daemon=True)
 bg_thread.start()
+
 
 # ─────────────────────────────────────────────
 #  ENDPOINT'LER
 # ─────────────────────────────────────────────
 
+
 @app.route("/")
 def home():
-    """Ana sayfa — temel Counter örneği"""
+    """Ana sayfa — temel Counter örneği."""
     start = time.time()
     time.sleep(random.uniform(0.01, 0.05))
     duration = time.time() - start
@@ -174,9 +179,10 @@ def home():
     </html>
     """, 200
 
+
 @app.route("/buy")
 def buy():
-    """Yavaş endpoint — Histogram'da uzun bucket'ları görmek için"""
+    """Yavaş endpoint — Histogram'da uzun bucket'ları görmek için."""
     start = time.time()
     # Gerçekçi bir DB/ödeme gecikmesi simülasyonu
     delay = random.uniform(0.1, 1.5)
@@ -194,9 +200,10 @@ def buy():
         "message": "Ürün sepete eklendi ✓"
     })
 
+
 @app.route("/api/data")
 def api_data():
-    """Orta hızlı endpoint"""
+    """Orta hızlı endpoint."""
     start = time.time()
     time.sleep(random.uniform(0.02, 0.2))
     duration = time.time() - start
@@ -212,9 +219,10 @@ def api_data():
         "response_time_ms": round(duration * 1000, 2)
     })
 
+
 @app.route("/api/users")
 def api_users():
-    """Kullanıcı listesi endpoint'i"""
+    """Kullanıcı listesi endpoint'i."""
     start = time.time()
     time.sleep(random.uniform(0.01, 0.08))
     duration = time.time() - start
@@ -227,9 +235,10 @@ def api_users():
     ]
     return jsonify({"users": users, "total": len(users)})
 
+
 @app.route("/checkout")
 def checkout():
-    """Sipariş tamamlama — başarı/başarısız oranı"""
+    """Sipariş tamamlama — başarı/başarısız oranı."""
     start = time.time()
     time.sleep(random.uniform(0.2, 0.8))
     duration = time.time() - start
@@ -256,9 +265,10 @@ def checkout():
         "currency": "TRY"
     }), status_code
 
+
 @app.route("/error")
 def error():
-    """Kasıtlı hata — hata metriklerini görmek için"""
+    """Kasıtlı hata — hata metriklerini görmek için."""
     start = time.time()
     time.sleep(random.uniform(0.01, 0.1))
     duration = time.time() - start
@@ -272,15 +282,19 @@ def error():
         "tip": "Prometheus'da http_errors_total metriğini kontrol edin"
     }), 500
 
+
 @app.route("/metrics")
 def metrics():
-    """Prometheus scrape endpoint'i"""
+    """Prometheus scrape endpoint'i."""
     return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
+
 
 @app.route("/health")
 def health():
+    """Health check endpoint."""
     return jsonify({"status": "healthy", "timestamp": time.time()})
+
 
 # ─────────────────────────────────────────────
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(host="0.0.0.0", port=5000, debug=False)
