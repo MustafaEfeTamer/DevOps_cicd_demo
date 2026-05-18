@@ -1,4 +1,4 @@
-# 🚀 DevOps Demo — Prometheus & Grafana Sınıf Sunumu
+# 🚀 DevOps Demo — Prometheus & Grafana
 
 [![CI/CD Pipeline](https://github.com/MustafaEfeTamer/DevOps_cicd_demo/actions/workflows/ci.yml/badge.svg)](https://github.com/MustafaEfeTamer/DevOps_cicd_demo/actions/workflows/ci.yml)
 [![Docker](https://img.shields.io/badge/Docker-Hub-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/)
